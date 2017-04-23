@@ -1,0 +1,32 @@
+%% Reading Data
+
+filename = '../FV_CSV_Matlab/FFT/FFT_avg/csv_FFT_avg.csv';
+data = csvread(filename);
+[rows, columns] = size(data); 
+
+fv = data(:, 1:columns-1);
+classes = data(:,columns);
+
+%%  SVM Classification
+
+% Linear Kernel Function
+SVMModelLinear = fitcsvm(fv, classes, 'Standardize', true, 'KernelFunction', 'linear');
+
+CVSVMModelLinear = crossval(SVMModelLinear);
+
+classLossLinear = kfoldLoss(CVSVMModelLinear);
+
+classificationRateLinear = 1 - classLossLinear;
+
+% Polynomial Kernel Function
+
+SVMModelPolynomial = fitcsvm(fv, classes, 'Standardize', true, 'KernelFunction', 'polynomial');
+
+classLoss = kfoldLoss(CVSVMModel);
+
+
+%% Plots Will be used later
+
+sv = SVMModel.SupportVectors;
+figure
+gscatter(fv(:,1), fv(:,2), classes);
